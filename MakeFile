@@ -1,4 +1,4 @@
-DB_URL=postgresql://root:secret@localhost:5433/expense_tracker?sslmode=disable
+DB_URL=postgresql://user:secret@localhost:5433/expense_tracker?sslmode=disable
 
 postgres:
 	docker run --name postgres --network bank-network -p 5433:5432 -e POSTGRES_USER=user -e POSTGRES_PASSWORD=secret -d postgres

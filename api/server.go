@@ -20,6 +20,8 @@ func NewServer(q *db.Queries) *Server {
 
 	// Aquí se añaden las rutas de la api
 	router.POST("/expenses", server.handleCreateExpense)
+	router.GET("/expenses/:id", server.handleGetExpense)
+	router.DELETE("/expenses/:id", server.handleDeleteExpense)
 
 	server.router = router
 	return &server

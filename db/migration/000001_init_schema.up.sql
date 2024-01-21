@@ -16,7 +16,8 @@ CREATE TABLE "incomes" (
 
 CREATE TABLE "categories" (
   "id" bigserial PRIMARY KEY,
-  "name" varchar(100) NOT NULL
+  "name" varchar(100) NOT NULL,
+  "created_at" timestamptz NOT NULL DEFAULT (now())
 );
 
 ALTER TABLE "expenses" ADD FOREIGN KEY ("category_id") REFERENCES "categories" ("id");

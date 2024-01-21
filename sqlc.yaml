@@ -1,0 +1,11 @@
+version: "1"
+packages:
+  - name: "db"
+    path: "./db/sqlc" #ruta donde estará el código generado por sqlc
+    queries: "./db/queries/" #ruta de donde sqlc tomará las queries para transformarlas en código go
+    schema: "./db/migration/" # de aquí tomará la estructura de la db
+    engine: "postgresql" # motor que se usará
+    emit_json_tags: true # añadirá json tags a los structs
+    emit_prepared_queries: false
+    emit_interface: false
+    emit_exact_table_names: false

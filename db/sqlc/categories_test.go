@@ -2,6 +2,8 @@ package db
 
 import (
 	"context"
+	"encoding/json"
+	"os"
 	"testing"
 
 	"github.com/gioSmith25/expense-tracker/utils"
@@ -79,4 +81,33 @@ func TestDeleteCategory(t *testing.T) {
 	require.Error(t, err)
 	require.EqualError(t, err, "sql: no rows in result set")
 	require.Empty(t, arg)
+}
+
+type CategoriesFile struct {
+	Categories []CreateCategoryParams
+}
+
+func TestCreateCategoriesBulk(t *testing.T) {
+	file, err := os.Open("../../categories.json")
+
+	require.NoError(t, err)
+
+	defer file.Close()
+
+	decoder := json.NewDecoder(file)
+	var data CategoriesFile
+	err = decoder.Decode(&data)
+
+	for _, category := range data.Categories {
+		arg := CreateCategoryParams{
+			Name:         category.Name,
+			IsForIncomes: category.IsForIncomes,
+		}
+		newCategory, err := testQueries.CreateCategory(context.Background(), arg)
+		require.NoError(t, err)
+
+		require.NotEmpty(t, newCategory)
+		require.Equal(t, arg.Name, newCategory.Name)
+		require.Equal(t, arg.IsForIncomes, newCategory.IsForIncomes)
+	}
 }

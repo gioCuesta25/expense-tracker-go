@@ -1,16 +1,9 @@
-CREATE TABLE "expenses" (
+CREATE TABLE "entries" (
   "id" bigserial PRIMARY KEY,
   "description" varchar(200) NOT NULL,
   "amount" bigserial NOT NULL,
   "category_id" bigserial NOT NULL,
-  "created_at" timestamptz NOT NULL DEFAULT (now())
-);
-
-CREATE TABLE "incomes" (
-  "id" bigserial PRIMARY KEY,
-  "description" varchar(200) NOT NULL,
-  "amount" bigserial NOT NULL,
-  "category_id" bigserial NOT NULL,
+  "type_id" bigserial NOT NULL,
   "created_at" timestamptz NOT NULL DEFAULT (now())
 );
 
@@ -21,6 +14,12 @@ CREATE TABLE "categories" (
   "created_at" timestamptz NOT NULL DEFAULT (now())
 );
 
-ALTER TABLE "expenses" ADD FOREIGN KEY ("category_id") REFERENCES "categories" ("id");
+CREATE TABLE "entry_types" (
+  "id" bigserial PRIMARY KEY,
+  "name" varchar(100) NOT NULL,
+  "created_at" timestamptz NOT NULL DEFAULT (now())
+);
 
-ALTER TABLE "incomes" ADD FOREIGN KEY ("category_id") REFERENCES "categories" ("id");
+ALTER TABLE "entries" ADD FOREIGN KEY ("category_id") REFERENCES "categories" ("id");
+
+ALTER TABLE "entries" ADD FOREIGN KEY ("type_id") REFERENCES "entry_types" ("id");

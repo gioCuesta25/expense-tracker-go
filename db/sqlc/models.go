@@ -13,18 +13,17 @@ type Category struct {
 	CreatedAt    time.Time `json:"created_at"`
 }
 
-type Expense struct {
+type Entry struct {
 	ID          int64     `json:"id"`
 	Description string    `json:"description"`
 	Amount      int64     `json:"amount"`
 	CategoryID  int64     `json:"category_id"`
+	TypeID      int64     `json:"type_id"`
 	CreatedAt   time.Time `json:"created_at"`
 }
 
-type Income struct {
-	ID          int64     `json:"id"`
-	Description string    `json:"description"`
-	Amount      int64     `json:"amount"`
-	CategoryID  int64     `json:"category_id"`
-	CreatedAt   time.Time `json:"created_at"`
+type EntryType struct {
+	ID        int64     `json:"id"`
+	Name      string    `json:"name"`
+	CreatedAt time.Time `json:"created_at"`
 }

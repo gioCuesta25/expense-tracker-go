@@ -1,12 +1,12 @@
--- name: GetIncome :one
+-- name: GetEntry :one
 SELECT * FROM entries
 WHERE id = $1 LIMIT 1;
 
--- name: ListIncomes :many
+-- name: ListEntries :many
 SELECT * FROM entries
 ORDER BY created_at;
 
--- name: CreateIncome :one
+-- name: CreateEntry :one
 INSERT INTO entries (
     description, amount, category_id, type_id
 ) VALUES (
@@ -14,7 +14,7 @@ INSERT INTO entries (
 )
 RETURNING *;
 
--- name: UpdateIncome :exec
+-- name: UpdateEntry :exec
 UPDATE entries
     set description = $2,
     amount = $3,
@@ -22,6 +22,6 @@ UPDATE entries
     type_id = $5
 WHERE id = $1;
 
--- name: DeleteIncome :exec
+-- name: DeleteEntry :exec
 DELETE FROM entries
 WHERE id = $1;

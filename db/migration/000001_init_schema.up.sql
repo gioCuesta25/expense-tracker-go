@@ -1,6 +1,6 @@
 CREATE TABLE "expenses" (
   "id" bigserial PRIMARY KEY,
-  "description" varchar(200),
+  "description" varchar(200) NOT NULL,
   "amount" bigserial NOT NULL,
   "category_id" bigserial NOT NULL,
   "created_at" timestamptz NOT NULL DEFAULT (now())
@@ -8,7 +8,7 @@ CREATE TABLE "expenses" (
 
 CREATE TABLE "incomes" (
   "id" bigserial PRIMARY KEY,
-  "description" varchar(200),
+  "description" varchar(200) NOT NULL,
   "amount" bigserial NOT NULL,
   "category_id" bigserial NOT NULL,
   "created_at" timestamptz NOT NULL DEFAULT (now())

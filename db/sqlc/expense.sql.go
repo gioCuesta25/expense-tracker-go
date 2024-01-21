@@ -5,7 +5,6 @@ package db
 
 import (
 	"context"
-	"database/sql"
 )
 
 const createExpense = `-- name: CreateExpense :one
@@ -18,9 +17,9 @@ RETURNING id, description, amount, category_id, created_at
 `
 
 type CreateExpenseParams struct {
-	Description sql.NullString `json:"description"`
-	Amount      int64          `json:"amount"`
-	CategoryID  int64          `json:"category_id"`
+	Description string `json:"description"`
+	Amount      int64  `json:"amount"`
+	CategoryID  int64  `json:"category_id"`
 }
 
 func (q *Queries) CreateExpense(ctx context.Context, arg CreateExpenseParams) (Expense, error) {
@@ -107,10 +106,10 @@ WHERE id = $1
 `
 
 type UpdateExpenseParams struct {
-	ID          int64          `json:"id"`
-	Description sql.NullString `json:"description"`
-	Amount      int64          `json:"amount"`
-	CategoryID  int64          `json:"category_id"`
+	ID          int64  `json:"id"`
+	Description string `json:"description"`
+	Amount      int64  `json:"amount"`
+	CategoryID  int64  `json:"category_id"`
 }
 
 func (q *Queries) UpdateExpense(ctx context.Context, arg UpdateExpenseParams) error {

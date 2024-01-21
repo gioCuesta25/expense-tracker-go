@@ -38,3 +38,7 @@ func RandomString(n int) string {
 func RandomMoney() int64 {
 	return RandomInt(0, 1000)
 }
+
+func RadomBool() bool {
+	return rand.Int63n(2) == 1
+}

@@ -9,17 +9,27 @@ import (
 
 const createCategory = `-- name: CreateCategory :one
 INSERT INTO categories (
-    name
+    name, is_for_incomes
 ) VALUES (
-    $1
+    $1, $2
 )
-RETURNING id, name, created_at
+RETURNING id, name, is_for_incomes, created_at
 `
 
-func (q *Queries) CreateCategory(ctx context.Context, name string) (Category, error) {
-	row := q.db.QueryRowContext(ctx, createCategory, name)
+type CreateCategoryParams struct {
+	Name         string `json:"name"`
+	IsForIncomes bool   `json:"is_for_incomes"`
+}
+
+func (q *Queries) CreateCategory(ctx context.Context, arg CreateCategoryParams) (Category, error) {
+	row := q.db.QueryRowContext(ctx, createCategory, arg.Name, arg.IsForIncomes)
 	var i Category
-	err := row.Scan(&i.ID, &i.Name, &i.CreatedAt)
+	err := row.Scan(
+		&i.ID,
+		&i.Name,
+		&i.IsForIncomes,
+		&i.CreatedAt,
+	)
 	return i, err
 }
 
@@ -34,7 +44,7 @@ func (q *Queries) DeleteCategory(ctx context.Context, id int64) error {
 }
 
 const getCategory = `-- name: GetCategory :one
-SELECT id, name, created_at FROM categories
+SELECT id, name, is_for_incomes, created_at FROM categories
 WHERE id = $1
 ORDER BY name
 `
@@ -42,12 +52,17 @@ ORDER BY name
 func (q *Queries) GetCategory(ctx context.Context, id int64) (Category, error) {
 	row := q.db.QueryRowContext(ctx, getCategory, id)
 	var i Category
-	err := row.Scan(&i.ID, &i.Name, &i.CreatedAt)
+	err := row.Scan(
+		&i.ID,
+		&i.Name,
+		&i.IsForIncomes,
+		&i.CreatedAt,
+	)
 	return i, err
 }
 
 const listCategories = `-- name: ListCategories :many
-SELECT id, name, created_at FROM categories
+SELECT id, name, is_for_incomes, created_at FROM categories
 ORDER BY created_at
 `
 
@@ -60,7 +75,12 @@ func (q *Queries) ListCategories(ctx context.Context) ([]Category, error) {
 	var items []Category
 	for rows.Next() {
 		var i Category
-		if err := rows.Scan(&i.ID, &i.Name, &i.CreatedAt); err != nil {
+		if err := rows.Scan(
+			&i.ID,
+			&i.Name,
+			&i.IsForIncomes,
+			&i.CreatedAt,
+		); err != nil {
 			return nil, err
 		}
 		items = append(items, i)
@@ -76,16 +96,18 @@ func (q *Queries) ListCategories(ctx context.Context) ([]Category, error) {
 
 const updateCategory = `-- name: UpdateCategory :exec
 UPDATE categories
-    set name = $2
+    set name = $2,
+    is_for_incomes = $3
 WHERE id = $1
 `
 
 type UpdateCategoryParams struct {
-	ID   int64  `json:"id"`
-	Name string `json:"name"`
+	ID           int64  `json:"id"`
+	Name         string `json:"name"`
+	IsForIncomes bool   `json:"is_for_incomes"`
 }
 
 func (q *Queries) UpdateCategory(ctx context.Context, arg UpdateCategoryParams) error {
-	_, err := q.db.ExecContext(ctx, updateCategory, arg.ID, arg.Name)
+	_, err := q.db.ExecContext(ctx, updateCategory, arg.ID, arg.Name, arg.IsForIncomes)
 	return err
 }

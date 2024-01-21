@@ -17,6 +17,7 @@ CREATE TABLE "incomes" (
 CREATE TABLE "categories" (
   "id" bigserial PRIMARY KEY,
   "name" varchar(100) NOT NULL,
+  "is_for_incomes" boolean NOT NULL,
   "created_at" timestamptz NOT NULL DEFAULT (now())
 );
 

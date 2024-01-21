@@ -8,9 +8,10 @@ import (
 )
 
 type Category struct {
-	ID        int64     `json:"id"`
-	Name      string    `json:"name"`
-	CreatedAt time.Time `json:"created_at"`
+	ID           int64     `json:"id"`
+	Name         string    `json:"name"`
+	IsForIncomes bool      `json:"is_for_incomes"`
+	CreatedAt    time.Time `json:"created_at"`
 }
 
 type Expense struct {

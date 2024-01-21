@@ -1,4 +1,4 @@
--- name: GetIncomes :one
+-- name: GetIncome :one
 SELECT * FROM incomes
 WHERE id = $1 LIMIT 1;
 
@@ -6,7 +6,7 @@ WHERE id = $1 LIMIT 1;
 SELECT * FROM incomes
 ORDER BY created_at;
 
--- name: CreateIncomes :one
+-- name: CreateIncome :one
 INSERT INTO incomes (
     description, amount, category_id
 ) VALUES (
@@ -14,13 +14,13 @@ INSERT INTO incomes (
 )
 RETURNING *;
 
--- name: UpdateIncomes :exec
+-- name: UpdateIncome :exec
 UPDATE incomes
     set description = $2,
     amount = $3,
     category_id = $4
 WHERE id = $1;
 
--- name: DeleteIncomes :exec
+-- name: DeleteIncome :exec
 DELETE FROM incomes
 WHERE id = $1;

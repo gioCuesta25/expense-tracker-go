@@ -8,7 +8,7 @@ import (
 	"database/sql"
 )
 
-const createIncomes = `-- name: CreateIncomes :one
+const createIncome = `-- name: CreateIncome :one
 INSERT INTO incomes (
     description, amount, category_id
 ) VALUES (
@@ -17,14 +17,14 @@ INSERT INTO incomes (
 RETURNING id, description, amount, category_id, created_at
 `
 
-type CreateIncomesParams struct {
+type CreateIncomeParams struct {
 	Description sql.NullString `json:"description"`
 	Amount      int64          `json:"amount"`
 	CategoryID  int64          `json:"category_id"`
 }
 
-func (q *Queries) CreateIncomes(ctx context.Context, arg CreateIncomesParams) (Income, error) {
-	row := q.db.QueryRowContext(ctx, createIncomes, arg.Description, arg.Amount, arg.CategoryID)
+func (q *Queries) CreateIncome(ctx context.Context, arg CreateIncomeParams) (Income, error) {
+	row := q.db.QueryRowContext(ctx, createIncome, arg.Description, arg.Amount, arg.CategoryID)
 	var i Income
 	err := row.Scan(
 		&i.ID,
@@ -36,23 +36,23 @@ func (q *Queries) CreateIncomes(ctx context.Context, arg CreateIncomesParams) (I
 	return i, err
 }
 
-const deleteIncomes = `-- name: DeleteIncomes :exec
+const deleteIncome = `-- name: DeleteIncome :exec
 DELETE FROM incomes
 WHERE id = $1
 `
 
-func (q *Queries) DeleteIncomes(ctx context.Context, id int64) error {
-	_, err := q.db.ExecContext(ctx, deleteIncomes, id)
+func (q *Queries) DeleteIncome(ctx context.Context, id int64) error {
+	_, err := q.db.ExecContext(ctx, deleteIncome, id)
 	return err
 }
 
-const getIncomes = `-- name: GetIncomes :one
+const getIncome = `-- name: GetIncome :one
 SELECT id, description, amount, category_id, created_at FROM incomes
 WHERE id = $1 LIMIT 1
 `
 
-func (q *Queries) GetIncomes(ctx context.Context, id int64) (Income, error) {
-	row := q.db.QueryRowContext(ctx, getIncomes, id)
+func (q *Queries) GetIncome(ctx context.Context, id int64) (Income, error) {
+	row := q.db.QueryRowContext(ctx, getIncome, id)
 	var i Income
 	err := row.Scan(
 		&i.ID,
@@ -98,7 +98,7 @@ func (q *Queries) ListIncomes(ctx context.Context) ([]Income, error) {
 	return items, nil
 }
 
-const updateIncomes = `-- name: UpdateIncomes :exec
+const updateIncome = `-- name: UpdateIncome :exec
 UPDATE incomes
     set description = $2,
     amount = $3,
@@ -106,15 +106,15 @@ UPDATE incomes
 WHERE id = $1
 `
 
-type UpdateIncomesParams struct {
+type UpdateIncomeParams struct {
 	ID          int64          `json:"id"`
 	Description sql.NullString `json:"description"`
 	Amount      int64          `json:"amount"`
 	CategoryID  int64          `json:"category_id"`
 }
 
-func (q *Queries) UpdateIncomes(ctx context.Context, arg UpdateIncomesParams) error {
-	_, err := q.db.ExecContext(ctx, updateIncomes,
+func (q *Queries) UpdateIncome(ctx context.Context, arg UpdateIncomeParams) error {
+	_, err := q.db.ExecContext(ctx, updateIncome,
 		arg.ID,
 		arg.Description,
 		arg.Amount,

@@ -6,13 +6,14 @@ import (
 
 	"github.com/gin-gonic/gin"
 	db "github.com/gioSmith25/expense-tracker/db/sqlc"
+	"github.com/google/uuid"
 )
 
 type createEntryReq struct {
-	Description string `json:"description" binding:"required"`
-	Amount      int64  `json:"amount" binding:"required,min=1"`
-	CategoryID  int64  `json:"category_id" binding:"required,min=1"`
-	TypeID      int64  `json:"type_id" binding:"required,min=1"`
+	Description string    `json:"description" binding:"required"`
+	Amount      int64     `json:"amount" binding:"required,min=1"`
+	CategoryID  uuid.UUID `json:"category_id" binding:"required,min=1"`
+	TypeID      uuid.UUID `json:"type_id" binding:"required,min=1"`
 }
 
 func (server *Server) handleCreateEntry(ctx *gin.Context) {
@@ -41,7 +42,7 @@ func (server *Server) handleCreateEntry(ctx *gin.Context) {
 }
 
 type getEntryReq struct {
-	ID int64 `uri:"id" binding:"required,min=1"`
+	ID uuid.UUID `uri:"id" binding:"required,min=1"`
 }
 
 func (server *Server) handleGetEntry(ctx *gin.Context) {
@@ -68,7 +69,7 @@ func (server *Server) handleGetEntry(ctx *gin.Context) {
 }
 
 type deleteEntryReq struct {
-	ID int64 `uri:"id" binding:"required,min=1"`
+	ID uuid.UUID `uri:"id" binding:"required,min=1"`
 }
 
 func (server *Server) handleDeleteEntry(ctx *gin.Context) {

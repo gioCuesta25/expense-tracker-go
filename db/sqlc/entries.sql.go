@@ -5,6 +5,8 @@ package db
 
 import (
 	"context"
+
+	"github.com/google/uuid"
 )
 
 const createEntry = `-- name: CreateEntry :one
@@ -17,10 +19,10 @@ RETURNING id, description, amount, category_id, type_id, created_at
 `
 
 type CreateEntryParams struct {
-	Description string `json:"description"`
-	Amount      int64  `json:"amount"`
-	CategoryID  int64  `json:"category_id"`
-	TypeID      int64  `json:"type_id"`
+	Description string    `json:"description"`
+	Amount      int64     `json:"amount"`
+	CategoryID  uuid.UUID `json:"category_id"`
+	TypeID      uuid.UUID `json:"type_id"`
 }
 
 func (q *Queries) CreateEntry(ctx context.Context, arg CreateEntryParams) (Entry, error) {
@@ -47,7 +49,7 @@ DELETE FROM entries
 WHERE id = $1
 `
 
-func (q *Queries) DeleteEntry(ctx context.Context, id int64) error {
+func (q *Queries) DeleteEntry(ctx context.Context, id uuid.UUID) error {
 	_, err := q.db.ExecContext(ctx, deleteEntry, id)
 	return err
 }
@@ -57,7 +59,7 @@ SELECT id, description, amount, category_id, type_id, created_at FROM entries
 WHERE id = $1 LIMIT 1
 `
 
-func (q *Queries) GetEntry(ctx context.Context, id int64) (Entry, error) {
+func (q *Queries) GetEntry(ctx context.Context, id uuid.UUID) (Entry, error) {
 	row := q.db.QueryRowContext(ctx, getEntry, id)
 	var i Entry
 	err := row.Scan(
@@ -123,11 +125,11 @@ WHERE id = $1
 `
 
 type UpdateEntryParams struct {
-	ID          int64  `json:"id"`
-	Description string `json:"description"`
-	Amount      int64  `json:"amount"`
-	CategoryID  int64  `json:"category_id"`
-	TypeID      int64  `json:"type_id"`
+	ID          uuid.UUID `json:"id"`
+	Description string    `json:"description"`
+	Amount      int64     `json:"amount"`
+	CategoryID  uuid.UUID `json:"category_id"`
+	TypeID      uuid.UUID `json:"type_id"`
 }
 
 func (q *Queries) UpdateEntry(ctx context.Context, arg UpdateEntryParams) error {

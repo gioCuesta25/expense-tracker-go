@@ -5,6 +5,8 @@ package db
 
 import (
 	"context"
+
+	"github.com/google/uuid"
 )
 
 const createCategory = `-- name: CreateCategory :one
@@ -38,7 +40,7 @@ DELETE FROM categories
 WHERE id = $1
 `
 
-func (q *Queries) DeleteCategory(ctx context.Context, id int64) error {
+func (q *Queries) DeleteCategory(ctx context.Context, id uuid.UUID) error {
 	_, err := q.db.ExecContext(ctx, deleteCategory, id)
 	return err
 }
@@ -49,7 +51,7 @@ WHERE id = $1
 ORDER BY name
 `
 
-func (q *Queries) GetCategory(ctx context.Context, id int64) (Category, error) {
+func (q *Queries) GetCategory(ctx context.Context, id uuid.UUID) (Category, error) {
 	row := q.db.QueryRowContext(ctx, getCategory, id)
 	var i Category
 	err := row.Scan(
@@ -102,9 +104,9 @@ WHERE id = $1
 `
 
 type UpdateCategoryParams struct {
-	ID           int64  `json:"id"`
-	Name         string `json:"name"`
-	IsForIncomes bool   `json:"is_for_incomes"`
+	ID           uuid.UUID `json:"id"`
+	Name         string    `json:"name"`
+	IsForIncomes bool      `json:"is_for_incomes"`
 }
 
 func (q *Queries) UpdateCategory(ctx context.Context, arg UpdateCategoryParams) error {

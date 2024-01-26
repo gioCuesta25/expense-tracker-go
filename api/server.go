@@ -25,6 +25,9 @@ func NewServer(q *db.Queries) *Server {
 
 	router.GET("/category", server.handleListCategories)
 
+	router.POST("/users", server.handleCreateUser)
+	router.GET("/users/:id", server.handleGetUser)
+
 	server.router = router
 	return &server
 }

@@ -10,12 +10,6 @@ import (
 	_ "github.com/lib/pq"
 )
 
-const (
-	dbDriver = "postgres"
-	dbSource = "postgresql://user:secret@localhost:5433/expense_tracker?sslmode=disable"
-	host     = "0.0.0.0:8080"
-)
-
 func main() {
 	config, err := utils.LoadConfig(".")
 

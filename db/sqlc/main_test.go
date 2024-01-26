@@ -6,18 +6,20 @@ import (
 	"os"
 	"testing"
 
+	"github.com/gioSmith25/expense-tracker/utils"
 	_ "github.com/lib/pq"
-)
-
-const (
-	dbSource = "postgresql://user:secret@localhost:5433/expense_tracker?sslmode=disable"
-	dbDriver = "postgres"
 )
 
 var testQueries *Queries
 
 func TestMain(m *testing.M) {
-	conn, err := sql.Open(dbDriver, dbSource)
+	config, err := utils.LoadConfig("../../")
+
+	if err != nil {
+		log.Fatal("Cannot load env: ", err)
+	}
+
+	conn, err := sql.Open(config.DBDriver, config.DBSource)
 
 	if err != nil {
 		log.Fatal("cannot connect to the database")

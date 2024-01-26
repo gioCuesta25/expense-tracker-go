@@ -2,3 +2,6 @@ notes.txt
 expense-tracker.sql
 categories.json
 random_users.json
+
+#Environment
+*.env

@@ -18,7 +18,6 @@ func NewServer(q *db.Queries) *Server {
 	server := Server{database: q}
 	router := gin.Default()
 
-	// Aquí se añaden las rutas de la api
 	router.POST("/entry", server.handleCreateEntry)
 	router.GET("/entry/:id", server.handleGetEntry)
 	router.GET("/entry", server.handleListEntries)

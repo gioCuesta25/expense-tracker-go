@@ -22,10 +22,19 @@ type Entry struct {
 	CategoryID  uuid.UUID `json:"category_id"`
 	TypeID      uuid.UUID `json:"type_id"`
 	CreatedAt   time.Time `json:"created_at"`
+	UserID      uuid.UUID `json:"user_id"`
 }
 
 type EntryType struct {
 	ID        uuid.UUID `json:"id"`
 	Name      string    `json:"name"`
 	CreatedAt time.Time `json:"created_at"`
+}
+
+type User struct {
+	ID             uuid.UUID `json:"id"`
+	HashedPassword string    `json:"hashed_password"`
+	Email          string    `json:"email"`
+	FullName       string    `json:"full_name"`
+	CreatedAt      time.Time `json:"created_at"`
 }

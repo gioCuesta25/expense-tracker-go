@@ -15,7 +15,7 @@ INSERT INTO entries (
 ) VALUES (
     $1, $2, $3, $4
 )
-RETURNING id, description, amount, category_id, type_id, created_at
+RETURNING id, description, amount, category_id, type_id, created_at, user_id
 `
 
 type CreateEntryParams struct {
@@ -40,6 +40,7 @@ func (q *Queries) CreateEntry(ctx context.Context, arg CreateEntryParams) (Entry
 		&i.CategoryID,
 		&i.TypeID,
 		&i.CreatedAt,
+		&i.UserID,
 	)
 	return i, err
 }
@@ -55,7 +56,7 @@ func (q *Queries) DeleteEntry(ctx context.Context, id uuid.UUID) error {
 }
 
 const getEntry = `-- name: GetEntry :one
-SELECT id, description, amount, category_id, type_id, created_at FROM entries
+SELECT id, description, amount, category_id, type_id, created_at, user_id FROM entries
 WHERE id = $1 LIMIT 1
 `
 
@@ -69,12 +70,13 @@ func (q *Queries) GetEntry(ctx context.Context, id uuid.UUID) (Entry, error) {
 		&i.CategoryID,
 		&i.TypeID,
 		&i.CreatedAt,
+		&i.UserID,
 	)
 	return i, err
 }
 
 const listEntries = `-- name: ListEntries :many
-SELECT id, description, amount, category_id, type_id, created_at FROM entries
+SELECT id, description, amount, category_id, type_id, created_at, user_id FROM entries
 ORDER BY created_at
 LIMIT $1
 OFFSET $2
@@ -101,6 +103,7 @@ func (q *Queries) ListEntries(ctx context.Context, arg ListEntriesParams) ([]Ent
 			&i.CategoryID,
 			&i.TypeID,
 			&i.CreatedAt,
+			&i.UserID,
 		); err != nil {
 			return nil, err
 		}

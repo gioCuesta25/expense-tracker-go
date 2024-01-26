@@ -42,7 +42,7 @@ func (server *Server) handleCreateEntry(ctx *gin.Context) {
 }
 
 type getEntryReq struct {
-	ID uuid.UUID `uri:"id" binding:"required,min=1"`
+	ID string `uri:"id" binding:"required,min=1"`
 }
 
 func (server *Server) handleGetEntry(ctx *gin.Context) {
@@ -52,7 +52,14 @@ func (server *Server) handleGetEntry(ctx *gin.Context) {
 		ctx.JSON(http.StatusBadRequest, errorResponse(err))
 	}
 
-	entry, err := server.database.GetEntry(ctx, req.ID)
+	id, err := uuid.Parse(req.ID)
+
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, errorResponse(err))
+		return
+	}
+
+	entry, err := server.database.GetEntry(ctx, id)
 
 	if err != nil {
 		if err == sql.ErrNoRows {
@@ -69,7 +76,7 @@ func (server *Server) handleGetEntry(ctx *gin.Context) {
 }
 
 type deleteEntryReq struct {
-	ID uuid.UUID `uri:"id" binding:"required,min=1"`
+	ID string `uri:"id" binding:"required,min=1"`
 }
 
 func (server *Server) handleDeleteEntry(ctx *gin.Context) {
@@ -79,7 +86,14 @@ func (server *Server) handleDeleteEntry(ctx *gin.Context) {
 		ctx.JSON(http.StatusBadRequest, errorResponse(err))
 	}
 
-	err := server.database.DeleteEntry(ctx, req.ID)
+	id, err := uuid.Parse(req.ID)
+
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, errorResponse(err))
+		return
+	}
+
+	err = server.database.DeleteEntry(ctx, id)
 
 	if err != nil {
 		if err == sql.ErrNoRows {

@@ -4,9 +4,10 @@ import "github.com/spf13/viper"
 
 // Almacenará todas las configuraciones
 type Config struct {
-	DBDriver string `mapstructure:"DB_DRIVER"`
-	DBSource string `mapstructure:"DB_SOURCE"`
-	Host     string `mapstructure:"HOST"`
+	DBDriver     string `mapstructure:"DB_DRIVER"`
+	DBSource     string `mapstructure:"DB_SOURCE"`
+	Host         string `mapstructure:"HOST"`
+	JWTSecretKey string `mapstructure:"JWT_SECRET_KEY"`
 }
 
 func LoadConfig(path string) (Config, error) {

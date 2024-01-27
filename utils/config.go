@@ -1,13 +1,19 @@
 package utils
 
-import "github.com/spf13/viper"
+import (
+	"time"
+
+	"github.com/spf13/viper"
+)
 
 // Almacenará todas las configuraciones
 type Config struct {
-	DBDriver     string `mapstructure:"DB_DRIVER"`
-	DBSource     string `mapstructure:"DB_SOURCE"`
-	Host         string `mapstructure:"HOST"`
-	JWTSecretKey string `mapstructure:"JWT_SECRET_KEY"`
+	DBDriver             string        `mapstructure:"DB_DRIVER"`
+	DBSource             string        `mapstructure:"DB_SOURCE"`
+	Host                 string        `mapstructure:"HOST"`
+	JWTSecretKey         string        `mapstructure:"JWT_SECRET_KEY"`
+	AccessTokenDuration  time.Duration `mapstructure:"ACCESS_TOKEN_DURATION"`
+	RefreshTokenDuration time.Duration `mapstructure:"REFRESH_TOKEN_DURATION"`
 }
 
 func LoadConfig(path string) (Config, error) {

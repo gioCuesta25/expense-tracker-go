@@ -45,15 +45,21 @@ func (server *Server) Start(address string) error {
 func (server *Server) setupRouter() {
 	router := gin.Default()
 
+	// Entries routes
 	router.POST("/entry", server.handleCreateEntry)
 	router.GET("/entry/:id", server.handleGetEntry)
 	router.GET("/entry", server.handleListEntries)
 	router.DELETE("/entry/:id", server.handleDeleteEntry)
 
+	// Categories routes
 	router.GET("/category", server.handleListCategories)
 
+	// User routes
 	router.POST("/users", server.handleCreateUser)
 	router.GET("/users/:id", server.handleGetUser)
+
+	// Login
+	router.POST("/login", server.loginUser)
 
 	server.router = router
 }

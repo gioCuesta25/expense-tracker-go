@@ -24,7 +24,7 @@ type userResponse struct {
 	CreatedAt time.Time `json:"created_at"`
 }
 
-func newUserResponse(user db.User) userResponse {
+func formatUserResponse(user db.User) userResponse {
 	return userResponse{
 		ID:        user.ID,
 		FullName:  user.FullName,
@@ -102,12 +102,7 @@ func (server *Server) handleGetUser(ctx *gin.Context) {
 		return
 	}
 
-	response := userResponse{
-		ID:        user.ID,
-		Email:     user.Email,
-		FullName:  user.FullName,
-		CreatedAt: user.CreatedAt,
-	}
+	response := formatUserResponse(user)
 
 	ctx.JSON(http.StatusOK, response)
 }
@@ -173,7 +168,7 @@ func (server *Server) loginUser(ctx *gin.Context) {
 		AccessTokenExpiresAt:  accessPayload.ExpiredAt,
 		RefreshToken:          refreshToken,
 		RefreshTokenExpiresAt: refreshPayload.ExpiredAt,
-		User:                  newUserResponse(user),
+		User:                  formatUserResponse(user),
 	}
 
 	ctx.JSON(http.StatusOK, response)
